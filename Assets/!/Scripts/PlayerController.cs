@@ -1,13 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
     //Init variables we want to be able to access from other scripts
+    //Player horizontal movement speed
     public float speed;
+
+    //Jump variables
     public float jumpForce;
     public int extraJumps;
+
+    //Dash variables
+    public float dashingPower;
+    public float dashingTime;
+    public float dashingCooldown;
     
 
 
@@ -24,6 +33,11 @@ public class PlayerController : MonoBehaviour
     public float checkRadius;
     public LayerMask whatIsGround;
     private int jumps;
+
+    //Dashing private variables
+    private bool canDash = true;
+    private bool isDashing;
+    [SerializeField] private SpriteTrailRenderer str;
 
 
 
@@ -53,15 +67,27 @@ public class PlayerController : MonoBehaviour
         {
             rb.velocity = Vector2.up * jumpForce;
         }
+
+        //If the player hits the dash button and can dash, dash the player in the direction they are facing
+        if(Input.GetKeyDown(KeyCode.LeftShift) && canDash)
+        {
+            StartCoroutine(Dash());
+        }
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
+        //If the player is dashing, don't do anything this frame like move or jump
+        if(isDashing)
+        {
+            return;
+        }
+
+
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
         //Gets the horizontal axis player input and multiplies the players velocity by their direction and speed
         moveInput = Input.GetAxisRaw("Horizontal");
-        Debug.Log(moveInput);
         rb.velocity = new Vector2 (moveInput * speed, rb.velocity.y);
 
         //Sprite flipper according to velocity direction (Means we only need animations in one direction so the artists' job will be easier)
@@ -82,6 +108,22 @@ public class PlayerController : MonoBehaviour
         Vector3 Scaler = transform.localScale;
         Scaler.x *= -1;
         transform.localScale = Scaler;
+    }
+
+    private IEnumerator Dash()
+    {
+        canDash = false;
+        isDashing = true;
+        float originalGravity = rb.gravityScale;
+        rb.gravityScale = 0f;
+        rb.velocity = new Vector2(transform.localScale.x * dashingPower, 0f);
+        //str.enabled = true;
+        yield return new WaitForSeconds(dashingTime);
+        //str.enabled = false;
+        rb.gravityScale = originalGravity;
+        isDashing = false;
+        yield return new WaitForSeconds(dashingCooldown);
+        canDash = true;
     }
 
 }

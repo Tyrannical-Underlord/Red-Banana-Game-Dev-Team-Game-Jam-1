@@ -484,6 +484,7 @@ GameObject:
   - component: {fileID: 658962693}
   - component: {fileID: 658962692}
   - component: {fileID: 658962696}
+  - component: {fileID: 658962697}
   m_Layer: 0
   m_Name: Temp Player
   m_TagString: Untagged
@@ -506,7 +507,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 2
   m_Material: {fileID: 6200000, guid: 9d41f112a6a122d4a8b77ad6ed45bf6c, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
@@ -634,13 +635,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
-  jumpForce: 11
+  jumpForce: 15
   extraJumps: 0
+  dashingPower: 24
+  dashingTime: 0.2
+  dashingCooldown: 1
   groundCheck: {fileID: 1348606234}
   checkRadius: 0.1
   whatIsGround:
     serializedVersion: 2
     m_Bits: 256
+  str: {fileID: 658962697}
+--- !u!114 &658962697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 658962691}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2f34c218c83d4748a253469541a93eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ClonesPerSecond: 20
+  scalePerSecond: {x: 1, y: 1, z: 0}
+  colorPerSecond: {r: 0, g: 0, b: 0, a: 1}
 --- !u!1 &744685599
 GameObject:
   m_ObjectHideFlags: 0
